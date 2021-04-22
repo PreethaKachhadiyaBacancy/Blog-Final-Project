@@ -1,31 +1,40 @@
 <template>
-  <b-container>
-    <b-row>
-      <b-col cols="12">
-        <h1>{{ postDetails.title }}</h1>
-      </b-col>
-    </b-row>
-    <b-row align-h="center">
-      <b-col cols="10">
-        <p>{{ postDetails.body }}</p>
-      </b-col>
-    </b-row>
-    <b-row align-h="end">
-      <b-col cols="4">
-        <router-link :to="'/userDetails/' + this.postDetails.userId"
-          >@{{ userDetails.username }} ({{ userDetails.name }})</router-link
-        >
-      </b-col>
-    </b-row>
-    <hr />
-    <b-row>
-      <b-col cols="12" class="commentTitle">
-        <h2>Comments</h2>
-      </b-col>
-      <hr class="commentHr" />
-      <base-comment :comments="allComments"></base-comment>
-    </b-row>
-  </b-container>
+  <div>
+    <b-container
+      :style="{ backgroundColor: background(this.postId) }"
+      v-if="postDetails"
+    >
+      <b-row>
+        <b-col cols="12">
+          <h1>{{ postDetails.title }}</h1>
+        </b-col>
+      </b-row>
+      <div class="postBody">
+        <b-row align-h="center">
+          <b-col cols="10">
+            <p>{{ postDetails.body }}</p>
+          </b-col>
+        </b-row>
+        <b-row align-h="end" class="comment">
+          <b-col cols="4">
+            <router-link
+              v-if="userDetails.name"
+              :to="'/userDetails/' + this.postDetails.userId"
+              >@{{ userDetails.username }} ({{ userDetails.name }})</router-link
+            >
+            <h6 v-else>Loading....</h6>
+          </b-col>
+        </b-row>
+      </div>
+      <b-row>
+        <b-col cols="12" class="commentTitle">
+          <h2 style="font-weight: 500">Comments</h2>
+        </b-col>
+        <base-comment :comments="allComments"></base-comment>
+      </b-row>
+    </b-container>
+    <h3 v-else>Loading....</h3>
+  </div>
 </template>
 
 <script>
@@ -38,8 +47,8 @@ export default {
     baseComment,
   },
   mounted() {
-    this.getPostDetails(this.postId);
-    this.getComments(this.postId);
+    this.getPostDetails();
+    this.getComments();
   },
   data() {
     return {
@@ -53,8 +62,8 @@ export default {
     };
   },
   methods: {
-    getPostDetails(id) {
-      Service.get(`posts/${id}`)
+    getPostDetails() {
+      Service.get(`posts/${this.postId}`)
         .then((res) => {
           this.postDetails = {
             ...res.data,
@@ -62,10 +71,10 @@ export default {
           this.getUserDetails(this.postDetails.userId);
         })
         .catch((error) => console.log(error));
-      this.getComments(id);
+      this.getComments();
     },
-    getComments(id) {
-      Service.get(`comments?postId=${id}`).then((res) => {
+    getComments() {
+      Service.get(`comments?postId=${this.postId}`).then((res) => {
         this.allComments = res.data;
       });
     },
@@ -77,6 +86,9 @@ export default {
         })
         .catch((error) => console.log(error));
     },
+    background: function(postId) {
+      return postId % 2 == 0 ? "#B5E0D9" : "#FFE6E6";
+    },
   },
 };
 </script>
@@ -87,6 +99,19 @@ export default {
   border: 1px solid rgb(228, 220, 220);
   border-radius: 4px;
   padding: 10px;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  margin-bottom: 5%;
+}
+
+.postBody {
+  border: 1px solid lightgray;
+  box-shadow: 2px 2px 4px gray;
+  border-radius: 15px;
+  background-color: white;
+  width: 90%;
+  margin: 0 auto;
+  height: fit-content;
 }
 
 .row {
@@ -97,11 +122,14 @@ export default {
 h1 {
   font-weight: bolder;
   font-size: 2.5rem;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 hr {
   width: 90%;
+  border-top: 1px solid darkgray;
 }
+
 
 .commentTitle {
   font-size: 200%;
@@ -112,5 +140,14 @@ hr {
   width: 30%;
   margin: 0 auto;
   margin-bottom: 2%;
+}
+
+a {
+  color: black;
+}
+
+a:hover {
+  font-size: 120%;
+  color: black;
 }
 </style>

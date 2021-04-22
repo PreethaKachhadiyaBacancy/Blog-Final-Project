@@ -1,5 +1,6 @@
 <template>
 <span v-if="username && name">@{{ username }} - {{ name }}</span>
+<h6 v-else>Loading...</h6>
 </template>
 
 <script>

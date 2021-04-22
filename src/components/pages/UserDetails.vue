@@ -35,6 +35,7 @@
         </b-col>
       </b-row>
     </b-card>
+    <h4 v-else>Loading....</h4>
   </div>
 </template>
 
