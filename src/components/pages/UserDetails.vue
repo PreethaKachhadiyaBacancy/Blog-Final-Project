@@ -5,8 +5,8 @@
         <h1>User Details</h1>
       </b-col>
     </b-row>
-    <b-card>
-      <b-row v-if="userDetails">
+    <b-card :style="{ backgroundColor: background(userId) }" v-if="userDetails" >
+      <b-row>
         <b-col cols="12">
           <p class="username">@{{ userDetails.username }}</p>
         </b-col>
@@ -30,8 +30,8 @@
         <b-col cols="12">
           <p>{{ userDetails.website }}</p>
         </b-col>
-        <b-col cols="12" >
-          <p>{{ userDetails.company ? userDetails.company.name : '' }}</p>
+        <b-col cols="12">
+          <p>{{ userDetails.company ? userDetails.company.name : "" }}</p>
         </b-col>
       </b-row>
     </b-card>
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import { Service } from "../../service.js";
 
 export default {
   created() {
@@ -53,14 +53,16 @@ export default {
   },
   methods: {
     getUserDetails() {
-      axios
-        .get("https://jsonplaceholder.typicode.com/users/" + this.userId)
+      Service.get(`users/${this.userId}`)
         .then((res) => {
           this.userDetails = {
             ...res.data,
           };
         })
         .catch((error) => console.log(error));
+    },
+    background: function(userId) {
+      return userId % 2 == 0 ? "#B5E0D9" : "#FFE6E6";
     },
   },
 };

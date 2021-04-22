@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import { Service } from "../../service";
 import PostUserInfo from "./PostUserInfo.vue";
 
 export default {
@@ -40,8 +40,7 @@ export default {
   props: ["posts"],
   mounted() {
     setTimeout(() => {
-      axios
-        .get("https://jsonplaceholder.typicode.com/users")
+      Service.get(`users`)
         .then((res) => {
           this.allUsers = res.data;
         })
@@ -54,13 +53,8 @@ export default {
     };
   },
   methods: {
-    imgSource: function(postId) {
-      return postId % 2 == 0
-        ? "https://cdn.pixabay.com/photo/2021/02/08/16/03/dinosaur-5995333_1280.png"
-        : "https://cdn.pixabay.com/photo/2017/04/19/10/24/vinyl-2241789_1280.png";
-    },
     background: function(postId) {
-      return postId % 2 == 0 ? "#A3C3B0" : "#DEA7A1";
+      return postId % 2 == 0 ? "#B5E0D9" : "#FFE6E6";
     },
   },
 };

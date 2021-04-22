@@ -19,17 +19,17 @@
     </b-row>
     <hr />
     <b-row>
-      <b-col cols="12" class="commentTitle">  
+      <b-col cols="12" class="commentTitle">
         <h2>Comments</h2>
       </b-col>
-      <hr class="commentHr">
+      <hr class="commentHr" />
       <base-comment :comments="allComments"></base-comment>
     </b-row>
   </b-container>
 </template>
 
 <script>
-import axios from "axios";
+import { Service } from "../../service.js";
 import baseComment from "../ui/BaseComment.vue";
 
 export default {
@@ -54,8 +54,7 @@ export default {
   },
   methods: {
     getPostDetails(id) {
-      axios
-        .get("https://jsonplaceholder.typicode.com/posts/" + id)
+      Service.get(`posts/${id}`)
         .then((res) => {
           this.postDetails = {
             ...res.data,
@@ -66,15 +65,12 @@ export default {
       this.getComments(id);
     },
     getComments(id) {
-      axios
-        .get("https://jsonplaceholder.typicode.com/comments?postId=" + id)
-        .then((res) => {
-          this.allComments = res.data;
-        });
+      Service.get(`comments?postId=${id}`).then((res) => {
+        this.allComments = res.data;
+      });
     },
     getUserDetails(id) {
-      axios
-        .get("https://jsonplaceholder.typicode.com/users/" + id)
+      Service.get(`users/${id}`)
         .then((res) => {
           this.userDetails.username = res.data.username;
           this.userDetails.name = res.data.name;
@@ -86,7 +82,6 @@ export default {
 </script>
 
 <style scoped>
-
 .container {
   box-shadow: 2px 2px 4px gray;
   border: 1px solid rgb(228, 220, 220);

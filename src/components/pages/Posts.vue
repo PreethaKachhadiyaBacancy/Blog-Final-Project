@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import { Service } from "../../service.js";
 import BasePost from '../ui/BasePost.vue';
 
 export default {
@@ -22,7 +22,7 @@ export default {
   },
   methods: {
     getAllPosts() {
-      axios.get('https://jsonplaceholder.typicode.com/posts')
+      Service.get(`posts`)
         .then(res => {
           this.allPosts = res.data;
         })
