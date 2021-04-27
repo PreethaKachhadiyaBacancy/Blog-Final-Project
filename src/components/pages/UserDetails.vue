@@ -1,12 +1,12 @@
 <template>
   <div>
-    <b-row>
+    <b-row class="m-0">
       <b-col>
         <h1>User Details</h1>
       </b-col>
     </b-row>
     <b-card :style="{ backgroundColor: background(userId) }" v-if="userDetails" >
-      <b-row>
+      <b-row class="m-0">
         <b-col cols="12">
           <p class="username">@{{ userDetails.username }}</p>
         </b-col>
