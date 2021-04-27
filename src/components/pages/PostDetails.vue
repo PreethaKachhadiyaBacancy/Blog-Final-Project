@@ -71,7 +71,6 @@ export default {
           this.getUserDetails(this.postDetails.userId);
         })
         .catch((error) => console.log(error));
-      this.getComments();
     },
     getComments() {
       Service.get(`comments?postId=${this.postId}`).then((res) => {
